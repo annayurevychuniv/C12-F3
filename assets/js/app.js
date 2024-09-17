@@ -47,6 +47,22 @@ let app = Vue.createApp({
             deep: true
         }
     },
+    // drag-n-drop
+    mounted() {
+        this.person = localStorage.getItem("person") || '';
+        this.todos = JSON.parse(localStorage.getItem('todos')) || [];
+
+        let el = this.$refs.todoList;
+        Sortable.create(el, {
+            onEnd: (event) => {
+                let newOrder = [...this.todos];
+                const movedItem = newOrder.splice(event.oldIndex, 1)[0];
+                newOrder.splice(event.newIndex, 0, movedItem);
+                this.saveNewOrder(newOrder);
+            }
+        });
+    },
+    // drag-n-drop
     template: `
         <main class="app">
             <section class="greeting">
