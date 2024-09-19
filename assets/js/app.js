@@ -2,10 +2,9 @@ let app = Vue.createApp({
     data: function () {
         return {
             todos: [],
-            person: '',
             input_content: '',
             input_category: ''
-        }
+        };
     },
     computed: {
         todos_asc() {
@@ -27,19 +26,38 @@ let app = Vue.createApp({
                 });
                 this.input_content = '';
                 this.input_category = '';
+                // Відправляємо оновлення на сервер після додавання нового завдання
+                this.sendUpdate();
             }
         },
         removeTodo(todo) {
             this.todos = this.todos.filter(t => t !== todo);
+            // Відправляємо оновлення на сервер після видалення завдання
+            this.sendUpdate();
         },
         saveNewOrder(newOrder) {
             this.todos = newOrder;
+            // Відправляємо оновлення на сервер після зміни порядку
+            this.sendUpdate();
+        },
+        sendUpdate() {
+            const data = JSON.stringify(this.todos);
+            console.log("Відправляємо оновлення через WebSocket:", data);
+            if (this.socket.readyState === WebSocket.OPEN) {
+                this.socket.send(data);
+            }
+        },
+        receiveUpdate(data) {
+            try {
+                const parsedData = JSON.parse(data);
+                console.log("Оновлення списку завдань від WebSocket:", parsedData);
+                this.todos = parsedData;
+            } catch (e) {
+                console.error("Помилка при парсингу даних WebSocket:", e);
+            }
         }
     },
     watch: {
-        person(newVal) {
-            localStorage.setItem("person", newVal);
-        },
         todos: {
             handler: function (newVal) {
                 localStorage.setItem("todos", JSON.stringify(newVal));
@@ -47,9 +65,7 @@ let app = Vue.createApp({
             deep: true
         }
     },
-    // drag-n-drop
     mounted() {
-        this.person = localStorage.getItem("person") || '';
         this.todos = JSON.parse(localStorage.getItem('todos')) || [];
 
         let el = this.$refs.todoList;
@@ -61,15 +77,38 @@ let app = Vue.createApp({
                 this.saveNewOrder(newOrder);
             }
         });
+
+        // Підключаємося до WebSocket сервера
+        this.socket = new WebSocket('ws://localhost:8080');
+        this.socket.onmessage = (event) => {
+            console.log("Отримано дані від WebSocket сервера:", event.data);
+
+            // Перевіряємо, чи є дані Blob
+            if (event.data instanceof Blob) {
+                // Якщо так, читаємо їх як текст
+                const reader = new FileReader();
+                reader.onload = () => {
+                    // Після завантаження викликаємо receiveUpdate
+                    this.receiveUpdate(reader.result);
+                };
+                reader.readAsText(event.data); // Читаємо Blob як текст
+            } else {
+                // Якщо це не Blob, просто викликаємо receiveUpdate з отриманими даними
+                this.receiveUpdate(event.data);
+            }
+        };
+
+        this.socket.onopen = () => {
+            console.log("WebSocket з'єднання відкрите.");
+            // Відправляємо поточні todos при підключенні
+            this.sendUpdate();
+        };
+        this.socket.onclose = () => {
+            console.log("WebSocket з'єднання закрите.");
+        };
     },
-    // drag-n-drop
     template: `
         <main class="app">
-            <section class="greeting">
-                <h2 class="title">
-                    What's up, <input v-model="person" placeholder="Enter your name" />
-                </h2>
-            </section>
             <section class="create-todo">
                 <h3>CREATE A TODO</h3>
                 <form @submit.prevent="addTodo">
