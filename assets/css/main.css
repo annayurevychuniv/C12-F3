@@ -8,9 +8,7 @@
 	--grey: #888;
 	--dark: #313154;
 	--danger: #ff5b57;
-
 	--shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
 	--business-glow: 0px 0px 4px rgba(58, 130, 238, 0.75);
 	--personal-glow: 0px 0px 4px rgba(234, 64, 164, 0.75);
 }
@@ -66,18 +64,18 @@ h4 {
 	display: flex;
 }
 
-.greeting .title input {
-	margin-left: 0.5rem;
-	flex: 1 1 0%;
-	min-width: 0;
-}
+	.greeting .title input {
+		margin-left: 0.5rem;
+		flex: 1 1 0%;
+		min-width: 0;
+	}
 
-.greeting .title,
-.greeting .title input {
-	color: var(--light);
-	font-size: 1.5rem;
-	font-weight: 700;
-}
+	.greeting .title,
+	.greeting .title input {
+		color: var(--light);
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
 
 .create-todo input[type="text"] {
 	display: block;
@@ -98,17 +96,17 @@ h4 {
 	margin-bottom: 1.5rem;
 }
 
-.create-todo .options label {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 1.5rem;
-	background-color: #FFF;
-	border-radius: 0.5rem;
-	box-shadow: var(--shadow);
-	cursor: pointer;
-}
+	.create-todo .options label {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 1.5rem;
+		background-color: #FFF;
+		border-radius: 0.5rem;
+		box-shadow: var(--shadow);
+		cursor: pointer;
+	}
 
 input[type="radio"],
 input[type="checkbox"] {
@@ -126,29 +124,29 @@ input[type="checkbox"] {
 	box-shadow: var(--business-glow);
 }
 
-.bubble.personal {
-	border-color: var(--personal);
-	box-shadow: var(--personal-glow);
-}
+	.bubble.personal {
+		border-color: var(--personal);
+		box-shadow: var(--personal-glow);
+	}
 
-.bubble::after {
-	content: "";
-	display: block;
-	opacity: 0;
-	width: 0px;
-	height: 0px;
-	background-color: var(--business);
-	box-shadow: var(--business-glow);
-	border-radius: 50%;
-	transition: 0.2s ease-in-out;
-}
+	.bubble::after {
+		content: "";
+		display: block;
+		opacity: 0;
+		width: 0px;
+		height: 0px;
+		background-color: var(--business);
+		box-shadow: var(--business-glow);
+		border-radius: 50%;
+		transition: 0.2s ease-in-out;
+	}
 
-.bubble.personal::after {
-	background-color: var(--personal);
-	box-shadow: var(--personal-glow);
-}
+	.bubble.personal::after {
+		background-color: var(--personal);
+		box-shadow: var(--personal-glow);
+	}
 
-input:checked~.bubble::after {
+input:checked ~ .bubble::after {
 	width: 10px;
 	height: 10px;
 	opacity: 1;
@@ -173,9 +171,9 @@ input:checked~.bubble::after {
 	transition: 0.2s ease-in-out;
 }
 
-.create-todo input[type="submit"]:hover {
-	opacity: 0.75;
-}
+	.create-todo input[type="submit"]:hover {
+		opacity: 0.75;
+	}
 
 .todo-list .list {
 	margin: 1rem 0;
@@ -202,10 +200,10 @@ input:checked~.bubble::after {
 	flex: 1 1 0%;
 }
 
-.todo-item .todo-content input {
-	color: var(--dark);
-	font-size: 1.125rem;
-}
+	.todo-item .todo-content input {
+		color: var(--dark);
+		font-size: 1.125rem;
+	}
 
 .todo-item .actions {
 	display: flex;
@@ -226,9 +224,9 @@ input:checked~.bubble::after {
 	transition: 0.2s ease-in-out;
 }
 
-.todo-item .actions button:hover {
-	opacity: 0.75;
-}
+	.todo-item .actions button:hover {
+		opacity: 0.75;
+	}
 
 .todo-item .actions .edit {
 	margin-right: 0.5rem;
